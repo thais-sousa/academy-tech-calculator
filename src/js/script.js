@@ -1,105 +1,131 @@
 'use strict'
 
-const screen = document.querySelector(".screen");
-const clearScreen = document.querySelector(".btn-clear");
+const display = document.querySelector(".screen");
+const clearDisplay = document.querySelector(".btn-clear");
 const deleteCharacter = document.querySelector(".btn-delete");
 const numbers = document.querySelectorAll(".btn-number");
 const operator = document.querySelectorAll(".btn-operator");
 const equals = document.querySelector(".btn-equals");
-const dotButton = document.querySelector(".btn-dot");
+const pointButton = document.querySelector(".btn-dot");
 
-let newNumber = true; 
+let newValue = true; 
 let clickedOperator; 
-let oldNumber; 
+let oldValue; 
+let result = 0;
+
+
+const clear = () => {
+    display.textContent = " "; 
+    clickedOperator = undefined; 
+    newValue = true;
+    oldValue = undefined;
+    result = 0;
+}
+
+clearDisplay.addEventListener("click", clear);
+
+
+deleteCharacter.addEventListener("click", function () {
+    display.textContent = display.textContent.slice(0, -1);
+})
 
 
 const refreshScreen = (num) => {
-    if(newNumber) {
-        screen.textContent = num;
-        newNumber = false;
+    if(newValue) {
+        display.textContent = num;
+        newValue = false;
     } else {
-        screen.textContent += num;
+        display.textContent += num;
     }   
 }
 
-const insertNumber = (event) => refreshScreen(event.target.textContent);
 
+const insertNumber = (event) => refreshScreen(event.target.textContent);
 
 numbers.forEach(num => num.addEventListener("click", insertNumber));
 
 
-dotButton.addEventListener("click", function () {
-    if(!screen.textContent.indexOf (".") != -1) {
-        if(screen.textContent.length > 0) {
-            refreshScreen(".")
-        } else {
-            refreshScreen("0.");
-        }
+const insertPoint = () => {
+    if(newValue) {
+        return refreshScreen("0.");
+    } if(display.textContent.includes(".")) {
+        return null;
+    } else {
+        refreshScreen (".");
     }
-})
+}
+
+pointButton.addEventListener("click", insertPoint);
 
 
 const setOperator = (event) => {
-    if(!newNumber) { 
+    if(!newValue) {       
         calculate();
-        newNumber = true; 
+        newValue = true; 
         clickedOperator = event.target.textContent; 
-        oldNumber = parseFloat(screen.textContent);
+        oldValue = parseFloat(display.textContent);
     }
 }
 
 operator.forEach(oper => oper.addEventListener("click", setOperator));
 
 
-const calculate = () => {
-    if(clickedOperator != undefined) {
-        const currentNumber = parseFloat(screen.textContent);
-        newNumber = true; //atualizar a tela
-
-        switch (clickedOperator) {
-            case "+" :
-                refreshScreen (oldNumber + currentNumber);
-                break;
-            
-            case "-" :
-                refreshScreen (oldNumber - currentNumber);
-                break;
-        
-            case "x" :
-                refreshScreen (oldNumber * currentNumber);
-                break;
-        
-            case "÷" :
-                refreshScreen (oldNumber / currentNumber);
-                break;
-        
-            case "%" :
-                refreshScreen (oldNumber * (currentNumber/100)); 
-                break;
-        }
-    }  
+const operatorEquals = (event) => {
+    setOperator(event);
+    // newValue = false;
 }
 
+equals.addEventListener("click", operatorEquals);
 
-equals.addEventListener("click", calculate);
 
-const checkResult = () => {
-    if (screen.textContent.length > 9) {
-        screen.textContent.toExponential(5);
+const checkResult = (num) => {
+    if (num.toString().length > 9) {
+        display.textContent = parseFloat(num.toExponential(5));
+    }else{
+        display.textContent  = num; // essa linha tem que aparecer no show display  
     }
 }
 
-clearScreen.addEventListener("click", function () {
-    screen.textContent = " "; 
-    clickedOperator = undefined; 
-    newNumber = true;
-    oldNumber = undefined;
-})
 
+const calculate = () => {
+    if(clickedOperator != undefined) {
+        let currentValue = parseFloat(display.textContent);
+        newValue = true; //atualizar a tela
 
-deleteCharacter.addEventListener("click", function () {
-    screen.textContent = screen.textContent.slice(0, -1);
-})
-
+        switch (clickedOperator) {
+            case "+" :
+                result = (oldValue + currentValue);
+                checkResult(result);
+                break;
+            
+            case "-" :
+                result = (oldValue - currentValue);
+                checkResult(result);
+                break;
+        
+            case "x" :
+                result = (oldValue * currentValue);
+                checkResult(result)
+                break;
+        
+            case "÷" :
+                if(currentValue == 0) {
+                    refreshScreen ("A divisão por zero não é definida");
+                } else {
+                    result = (oldValue / currentValue);
+                    checkResult(result)
+                }
+                break;
+        
+            case "%":
+                if(result != 0) {
+                    checkResult (result / 100);
+                } else {
+                    checkResult (oldValue * (currentValue/100));
+                }
+                break;
+        }
+    }
+}
 
 
