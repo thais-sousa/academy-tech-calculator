@@ -72,7 +72,7 @@ operator.forEach(oper => oper.addEventListener("click", setOperator));
 
 const operatorEquals = (event) => {
     setOperator(event);
-    // newValue = false;
+    newValue = false;
 }
 
 equals.addEventListener("click", operatorEquals);
