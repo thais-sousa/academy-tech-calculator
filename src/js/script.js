@@ -113,7 +113,7 @@ const calculate = () => {
         
             case "x" :
                 result = (oldValue * currentValue);
-                processingResultDisplay(result)
+                processingResultDisplay(result);
                 break;
         
             case "÷" :
@@ -121,14 +121,13 @@ const calculate = () => {
                     showDisplay ("A divisão por zero não é definida");
                 } else {
                     result = (oldValue / currentValue);
-                    processingResultDisplay(result)
+                    processingResultDisplay(result);
                 }
                 break;
         
             case "%":
                 if(result != 0) {
                     result = (result / 100);
-                    console.log("if result" + result)
                     processingResultDisplay(result);
                 } else {
                     result = (oldValue * (currentValue/100));
