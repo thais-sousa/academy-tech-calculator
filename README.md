@@ -1,6 +1,7 @@
 # Implementação de uma calculadora simples
 
 Calculadora desenvolvida para aprendizado das tecnologias utilizadas.
+<a href="https://academy-tech-calculator-nmhgahaci-thais-sousa.vercel.app/">Acesse a calculadora aqui!</a>
 
 ---
 
