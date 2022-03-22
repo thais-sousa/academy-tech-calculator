@@ -8,8 +8,9 @@ const operator = document.querySelectorAll(".btn-operator");
 const equals = document.querySelector(".btn-equals");
 const pointButton = document.querySelector(".btn-dot");
 
-let newValue = true; 
 let clickedOperator; 
+let limitOfDigits = 10;
+let newValue = true;
 let oldValue; 
 let result = 0;
 
@@ -30,28 +31,28 @@ deleteCharacter.addEventListener("click", function () {
 })
 
 
-const refreshScreen = (num) => {
+const showDisplay = (num) => {
     if(newValue) {
         display.textContent = num;
         newValue = false;
-    } else {
+    } else if (display.textContent.length < limitOfDigits) {
         display.textContent += num;
     }   
 }
 
 
-const insertNumber = (event) => refreshScreen(event.target.textContent);
+const insertNumber = (event) => showDisplay(event.target.textContent);
 
 numbers.forEach(num => num.addEventListener("click", insertNumber));
 
 
 const insertPoint = () => {
     if(newValue) {
-        return refreshScreen("0.");
+        return showDisplay("0.");
     } if(display.textContent.includes(".")) {
         return null;
     } else {
-        refreshScreen (".");
+        showDisplay (".");
     }
 }
 
@@ -71,57 +72,67 @@ operator.forEach(oper => oper.addEventListener("click", setOperator));
 
 
 const operatorEquals = (event) => {
-    setOperator(event);
     newValue = false;
+    setOperator(event);
 }
 
 equals.addEventListener("click", operatorEquals);
 
 
 const checkResult = (num) => {
-    if (num.toString().length > 9) {
-        display.textContent = parseFloat(num.toExponential(5));
+    let value = num.toFixed(2);
+    if (value.toString().length > limitOfDigits) {
+       return parseFloat(value).toExponential(5);
     }else{
-        display.textContent  = num; // essa linha tem que aparecer no show display  
+       return parseFloat(value); 
     }
+}
+
+
+const processingResultDisplay = (num) => {
+    let resultFormate = checkResult(num);
+    display.textContent = resultFormate;
 }
 
 
 const calculate = () => {
     if(clickedOperator != undefined) {
         let currentValue = parseFloat(display.textContent);
-        newValue = true; //atualizar a tela
+        newValue = true; 
 
         switch (clickedOperator) {
             case "+" :
                 result = (oldValue + currentValue);
-                checkResult(result);
+                processingResultDisplay(result);
                 break;
             
             case "-" :
                 result = (oldValue - currentValue);
-                checkResult(result);
+                processingResultDisplay(result);
                 break;
         
             case "x" :
                 result = (oldValue * currentValue);
-                checkResult(result)
+                processingResultDisplay(result)
                 break;
         
             case "÷" :
                 if(currentValue == 0) {
-                    refreshScreen ("A divisão por zero não é definida");
+                    showDisplay ("A divisão por zero não é definida");
                 } else {
                     result = (oldValue / currentValue);
-                    checkResult(result)
+                    processingResultDisplay(result)
                 }
                 break;
         
             case "%":
                 if(result != 0) {
-                    checkResult (result / 100);
+                    result = (result / 100);
+                    console.log("if result" + result)
+                    processingResultDisplay(result);
                 } else {
-                    checkResult (oldValue * (currentValue/100));
+                    result = (oldValue * (currentValue/100));
+                    processingResultDisplay(result);
                 }
                 break;
         }
