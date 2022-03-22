@@ -23,8 +23,8 @@
 .calculator {
     background-color: var(--blue);
     box-shadow: 0 10px 10px var(--gray);
-    height: 300px;
-    width: 250px;
+    height: 450px;
+    width: 380px;
 }
 
 .screen {
@@ -33,10 +33,10 @@
     color: var(--gray);
     display: flex;
     font-family: sans-serif;
-    font-size: 25px;
-    height: 50px;
+    font-size: 38px;
+    height: 80px;
     justify-content: flex-end;
-    margin: 15px;
+    margin: 22px;
     padding: 5px;
 }
 
@@ -45,7 +45,7 @@ button {
     border: none;
     color: var(--gray);
     cursor: pointer;
-    height: 40px;
+    height: 60px;
 }
 
 .buttons {
@@ -53,7 +53,8 @@ button {
     gap: 1px;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: (5, 50px);
-    padding: 2px 15px;
+    padding: 2px 22px;
+    
 }
 
 .btn-equals {
@@ -61,8 +62,11 @@ button {
 }
 
 .btn-operator,
-.btn-equals {
-    font-size: 100%;
+.btn-equals,
+.btn-number,
+.btn-clear,
+.btn-delete {
+    font-size: 120%;
 }
 
 .btn-number:hover,
