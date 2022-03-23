@@ -31,19 +31,19 @@ deleteCharacter.addEventListener("click", function () {
 })
 
 
-const showDisplay = (num) => {
+const showDisplay = number => {
     if(newValue) {
-        display.textContent = num;
+        display.textContent = number;
         newValue = false;
     } else if (display.textContent.length < limitOfDigits) {
-        display.textContent += num;
+        display.textContent += number;
     }   
 }
 
 
-const insertNumber = (event) => showDisplay(event.target.textContent);
+const insertNumber = event => showDisplay(event.target.textContent);
 
-numbers.forEach(num => num.addEventListener("click", insertNumber));
+numbers.forEach(number => number.addEventListener("click", insertNumber));
 
 
 const insertPoint = () => {
@@ -59,7 +59,7 @@ const insertPoint = () => {
 pointButton.addEventListener("click", insertPoint);
 
 
-const setOperator = (event) => {
+const setOperator = event => {
     if(!newValue) {       
         calculate();
         newValue = true; 
@@ -71,7 +71,7 @@ const setOperator = (event) => {
 operator.forEach(oper => oper.addEventListener("click", setOperator));
 
 
-const operatorEquals = (event) => {
+const operatorEquals = event => {
     setOperator(event);
     newValue = false;
 }
@@ -79,8 +79,8 @@ const operatorEquals = (event) => {
 equals.addEventListener("click", operatorEquals);
 
 
-const checkResult = (num) => {
-    let value = num.toFixed(2);
+const checkResult = number => {
+    let value = number.toFixed(2);
     if (value.toString().length > limitOfDigits) {
        return parseFloat(value).toExponential(5);
     }else{
@@ -89,14 +89,14 @@ const checkResult = (num) => {
 }
 
 
-const processingResultDisplay = (num) => {
-    let resultFormate = checkResult(num);
+const processingResultDisplay = number => {
+    let resultFormate = checkResult(number);
     display.textContent = resultFormate;
 }
 
 
 const calculate = () => {
-    if(clickedOperator != undefined) {
+    if(clickedOperator !== undefined) {
         let currentValue = parseFloat(display.textContent);
         newValue = true; 
 
@@ -117,7 +117,7 @@ const calculate = () => {
                 break;
         
             case "÷" :
-                if(currentValue == 0) {
+                if(currentValue === 0) {
                     showDisplay ("A divisão por zero não é definida");
                 } else {
                     result = (oldValue / currentValue);
@@ -126,7 +126,7 @@ const calculate = () => {
                 break;
         
             case "%":
-                if(result != 0) {
+                if(result !== 0) {
                     result = (result / 100);
                     processingResultDisplay(result);
                 } else {
